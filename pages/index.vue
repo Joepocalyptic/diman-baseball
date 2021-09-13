@@ -1,8 +1,5 @@
 <template>
   <main class="w-2/3 mx-auto py-20">
-    <span class="absolute right-5 bottom-5 text-diman-dark-gray">
-      Developed by <a href="https://www.joeypereira.dev" target="_blank">Joey Pereira</a>
-    </span>
     <div class="h-80 bg-diman-green-bg px-20 py-10 text-white font-impact relative">
       <div class="h-full bg-diman-gray-border p-2 grid grid-rows-2 grid-flow-col auto-cols-fr gap-2">
         <div ref="away-bg" class="h-full col-span-2 row-span-1 bg-blue-500 overflow-hidden flex items-center px-10 py-5"
