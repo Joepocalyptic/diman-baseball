@@ -312,7 +312,6 @@ export default {
     if(teams) {
       teams.forEach(team => {
         team.index = teams.indexOf(team)
-        console.log(team)
       })
       return { teams }
     } else {
