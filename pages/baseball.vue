@@ -2,19 +2,19 @@
   <main class="w-2/3 mx-auto py-20">
     <div class="h-80 bg-diman-green-bg px-20 py-10 text-white font-impact relative">
       <div class="h-full bg-diman-gray-border p-2 grid grid-rows-2 grid-flow-col auto-cols-fr gap-2">
-        <div ref="away-bg" class="h-full col-span-2 row-span-1 bg-blue-500 overflow-hidden flex items-center px-10 py-5"
-             :style="{ background: `linear-gradient(0deg, white -40%, ${awayColor})`}">
+        <div ref="away-bg" class="h-full col-span-2 row-span-1 bg-blue-500 overflow-hidden flex items-center px-10 py-3"
+             :style="{ background: `linear-gradient(0deg, white -40%, ${ awayTeam.color })`}">
           <div class="h-full flex items-center">
-            <img ref="away-logo" class="h-full" :src="`logo/${awayLogo}.png`" alt="Away team logo">
-            <h2 ref="away-name" class="ml-10 text-5xl">{{ awayName }}</h2>
+            <img ref="away-logo" class="h-full" :src="awayTeam.team_logo.url" alt="">
+            <h2 ref="away-name" class="ml-10 text-5xl">{{ awayTeam.team_name }}</h2>
           </div>
           <span ref="away-score" class="flex-1 text-right text-6xl">{{ awayRuns }}</span>
         </div>
-        <div ref="home-bg" class="h-full col-span-2 row-span-1 bg-blue-500 overflow-hidden flex items-center px-10 py-5"
-             :style="{ background: `linear-gradient(180deg, white -40%, ${homeColor})`}">
+        <div ref="home-bg" class="h-full col-span-2 row-span-1 bg-blue-500 overflow-hidden flex items-center px-10 py-3"
+             :style="{ background: `linear-gradient(180deg, white -40%, ${ homeTeam.color })`}">
           <div class="h-full flex items-center">
-            <img ref="home-logo" class="h-full" :src="`logo/${homeLogo}.png`" alt="Home team logo">
-            <h2 ref="home-name" class="ml-10 text-5xl">{{ homeName }}</h2>
+            <img ref="home-logo" class="h-full" :src="homeTeam.team_logo.url" alt="">
+            <h2 ref="home-name" class="ml-10 text-5xl">{{ homeTeam.team_name }}</h2>
           </div>
           <span ref="home-score" class="flex-1 text-right text-6xl">{{ homeRuns }}</span>
         </div>
@@ -89,14 +89,10 @@
             <span class="mr-2">Away</span>
             <div class="flex-1 h-0.5 bg-diman-dark-gray"></div>
           </div>
-          <label for="away-name" class="block text-diman-light-gray">Team Name</label>
-          <input v-model="awayName" class="block w-full px-2 text-white bg-diman-dark-gray" id="away-name" type="text" placeholder="Away Team Name">
-          <label for="away-color" class="block mt-5 text-diman-light-gray">Team Color</label>
-          <input v-model="awayColor" class="block w-full px-2 bg-diman-dark-gray" id="away-color" type="color">
-          <label for="away-logo" class="block mt-5 text-diman-light-gray">Team Logo</label>
-          <select v-model="awayLogo" class="block w-full px-2 bg-diman-dark-gray" id="away-logo" type="color">
-            <option v-for="logo in logos" :value="logo.value">
-              {{ logo.text }}
+          <label for="away-team" class="block text-diman-light-gray">Away Team</label>
+          <select v-model="awayTeam" class="block w-full px-2 py-1 bg-diman-dark-gray" id="away-team">
+            <option v-for="team in teams" :value="teams[team.index]">
+              {{ team.team_name }}
             </option>
           </select>
           <div class="mt-7 flex">
@@ -114,14 +110,10 @@
             <span class="mr-2">Home</span>
             <div class="flex-1 h-0.5 bg-diman-dark-gray"></div>
           </div>
-          <label for="home-name" class="block text-diman-light-gray">Team Name</label>
-          <input v-model="homeName" class="block w-full px-2 text-white bg-diman-dark-gray" id="home-name" type="text" placeholder="Home Team Name">
-          <label for="home-color" class="block mt-5 text-diman-light-gray">Team Color</label>
-          <input v-model="homeColor" class="block w-full px-2 bg-diman-dark-gray" id="home-color" type="color">
-          <label for="home-logo" class="block mt-5 text-diman-light-gray">Team Logo</label>
-          <select v-model="homeLogo" class="block w-full px-2 bg-diman-dark-gray" id="home-logo" type="color">
-            <option v-for="logo in logos" :value="logo.value">
-              {{ logo.text }}
+          <label for="home-team" class="block text-diman-light-gray">Home Team</label>
+          <select v-model="homeTeam" class="block w-full px-2 py-1 bg-diman-dark-gray" id="home-team">
+            <option v-for="team in teams" :value="teams[team.index]">
+              {{ team.team_name }}
             </option>
           </select>
           <div class="mt-7 flex">
@@ -163,16 +155,13 @@
 
 <script>
 export default {
+  head() {
+    return {
+      title: "Baseball | Diman Sports"
+    }
+  },
   data() {
     return {
-      // Team data
-      awayName: "Away Team Name",
-      awayColor: "#FF0000",
-      awayLogo: "default",
-      homeName: "Diman Bengals",
-      homeColor: "#F79224",
-      homeLogo: 'diman',
-
       // Game data
       homeRuns: 0,
       awayRuns: 0,
@@ -180,16 +169,25 @@ export default {
       inningBottom: false,
       outs: 0,
 
+      homeTeam: {
+        team_color: "",
+        team_name: "Please choose a team",
+        team_logo: {
+          url: ""
+        }
+      },
+      awayTeam: {
+        team_color: "",
+        team_name: "Please choose a team",
+        team_logo: {
+          url: ""
+        }
+      },
+
       // Bases
       baseOne: false,
       baseTwo: false,
-      baseThree: false,
-
-      logos: [
-        { text: 'Blank', value: 'default' },
-        { text: 'Diman Bengals', value: 'diman' },
-        { text: 'Westport Wildcats', value: 'westport' }
-      ]
+      baseThree: false
     }
   },
   methods: {
@@ -307,6 +305,18 @@ export default {
       } else {
         return "135deg"
       }
+    }
+  },
+  async asyncData({ $prismic, params, error }) {
+    const teams = (await $prismic.api.getSingle('baseball')).data.teams
+    if(teams) {
+      teams.forEach(team => {
+        team.index = teams.indexOf(team)
+        console.log(team)
+      })
+      return { teams }
+    } else {
+      error({ statusCode: 404, message: 'Invalid CMS configuration' })
     }
   }
 }

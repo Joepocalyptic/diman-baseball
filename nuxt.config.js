@@ -4,7 +4,6 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Diman Baseball Scoreboard',
     htmlAttrs: {
       lang: 'en'
     },
@@ -37,10 +36,14 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    ["@nuxtjs/prismic", {"endpoint": "https://diman-sports.cdn.prismic.io/api/v2"}]
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  },
+  router: {
+    middleware: ['router']
+  },
 }
